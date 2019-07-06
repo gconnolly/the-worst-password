@@ -21,8 +21,19 @@ const twitter = new twitterAPI({
 const scan = require('./scan')
 
 app.post('/', (req, res) => {
+  theworstpassword(req, res, true)
+  res.send('OK')
+})
+
+app.post('/test', (req, res) => {
+  theworstpassword(req, res, false)
+  res.send('OK')
+})
+
+function theworstpassword(req, res, tweetTheResult) {
   const twitterId = twitterParse(req.body.link).id
-  console.log(twitterId)
+  console.log('Process triggered by: ' + twitterId)
+
   client.hgetall('cursor', (error, cursor) => {
     if(error) {
       console.log('Error connecting to redis')
@@ -42,18 +53,40 @@ app.post('/', (req, res) => {
         return
       }
 
+      // Log the result
       console.log('SUCCESS:' + result.password)
 
+      // Persist the ursor
       client.hmset('cursor', 'value', result.cursor, (error) => {
         if (error) {
           console.log(error)
         }
       })
+
+      // Tweet the result
+      if (tweetTheResult) {
+        twitter.statuses(
+          'update',
+          {
+            status: result.password,
+            in_reply_to_status_id: twitterId
+          },
+          access.token,
+          access.tokenSecret,
+          (error, data, response) => {
+            if (error) {
+              console.log(error)
+              res.status(500).end()
+            } else {
+              console.log(tweet)
+              res.send(tweet)
+            }
+          }
+        )
+      }
     })
   })
-
-  res.send('OK')
-})
+}
 
 app.post('/reset', (req, res) => {
   client.del('cursor')
