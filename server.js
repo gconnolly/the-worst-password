@@ -21,16 +21,16 @@ const twitter = new twitterAPI({
 const scan = require('./scan')
 
 app.post('/', (req, res) => {
-  theworstpassword(req, res, true)
+  theworstpassword(req, true)
   res.send('OK')
 })
 
 app.post('/test', (req, res) => {
-  theworstpassword(req, res, false)
+  theworstpassword(req, false)
   res.send('OK')
 })
 
-function theworstpassword(req, res, tweetTheResult) {
+function theworstpassword(req, tweetTheResult) {
   const twitterId = twitterParse(req.body.link).id
   console.log('Process triggered by: ' + twitterId)
 
@@ -83,14 +83,13 @@ function theworstpassword(req, res, tweetTheResult) {
             },
             access.token,
             access.tokenSecret,
-            (error, data, response) => {
+            (error) => {
               if (error) {
                 console.log(error)
-                res.status(500).end()
-              } else {
-                console.log(tweet)
-                res.send(tweet)
+                return
               }
+
+              console.log('Tweeted: ' + result.password)
             }
           )
         })
