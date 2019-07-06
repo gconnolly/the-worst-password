@@ -35,10 +35,12 @@ app.post('/', (req, res) => {
 
     if(!cursor) {
       console.log('Error retrieving cursor')
-      return
+      cursor = {
+        value: 1740
+      }
     }
 
-    scan(cursor.value || 1740, (error, result) => {
+    scan(cursor.value, (error, result) => {
       if(error) {
         console.log('Error scanning for value: ' + error)
         return
