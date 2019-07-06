@@ -18,7 +18,8 @@ function convertToNumberingScheme(number) {
 
 function scan(cursor, callback) {
     const interval = setInterval(() => {
-        let password = convertToNumberingScheme(cursor++);
+        let password = convertToNumberingScheme(cursor++)
+        console.log(password)
         let hash = crypto.createHash("sha1").update(password).digest("hex")
         let hashPrefix = hash.substring(0, 5)
         let hashSuffix = hash.substring(5).toUpperCase()
