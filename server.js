@@ -36,7 +36,7 @@ app.post('/', (req, res) => {
     if(!cursor) {
       console.log('Error retrieving cursor')
       cursor = {
-        value: 7440
+        value: process.env.SEED_CURSOR
       }
     }
 
@@ -74,6 +74,10 @@ app.get('/authenticate', (req, res) => {
       })
     }
   })
+})
+
+app.get('/reset', (req, res) => {
+  client.del('cursor')
 })
 
 app.get('/oauth', (req, res) => {
