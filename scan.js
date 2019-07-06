@@ -31,7 +31,7 @@ function scan(cursor, callback) {
             .then(ispwned => {
                 if(!ispwned) {
                     clearInterval(interval)
-                    callback(null, { cursor, password })
+                    callback(null, { cursor: cursor - 1, password })
                 }
             })
     }, 1500)
