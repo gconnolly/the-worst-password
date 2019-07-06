@@ -35,12 +35,12 @@ function theworstpassword(req, res, tweetTheResult) {
   console.log('Process triggered by: ' + twitterId)
 
   client.hgetall('cursor', (error, cursor) => {
-    if(error) {
+    if (error) {
       console.log('Error connecting to redis')
       return
     }
 
-    if(!cursor) {
+    if (!cursor) {
       console.log('Error retrieving cursor')
       cursor = {
         value: process.env.SEED_CURSOR
@@ -48,7 +48,7 @@ function theworstpassword(req, res, tweetTheResult) {
     }
 
     scan(cursor.value, (error, result) => {
-      if(error) {
+      if (error) {
         console.log('Error scanning for value: ' + error)
         return
       }
@@ -65,24 +65,35 @@ function theworstpassword(req, res, tweetTheResult) {
 
       // Tweet the result
       if (tweetTheResult) {
-        twitter.statuses(
-          'update',
-          {
-            status: result.password,
-            in_reply_to_status_id: twitterId
-          },
-          access.token,
-          access.tokenSecret,
-          (error, data, response) => {
-            if (error) {
-              console.log(error)
-              res.status(500).end()
-            } else {
-              console.log(tweet)
-              res.send(tweet)
-            }
+        client.hgetall('access', (error, access) => {
+          if (error) {
+            console.log(error)
+            res.end()
+          } 
+          
+          if (!access) {
+            return
           }
-        )
+
+          twitter.statuses(
+            'update',
+            {
+              status: result.password,
+              in_reply_to_status_id: twitterId
+            },
+            access.token,
+            access.tokenSecret,
+            (error, data, response) => {
+              if (error) {
+                console.log(error)
+                res.status(500).end()
+              } else {
+                console.log(tweet)
+                res.send(tweet)
+              }
+            }
+          )
+        })
       }
     })
   })
