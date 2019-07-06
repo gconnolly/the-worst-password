@@ -14,3 +14,5 @@ app.post('/', (req, res) => {
     console.log(twitterId)
     res.send('OK')
 })
+
+app.listen(process.env.PORT || 8080, () => console.log('listening ' + (process.env.PORT || 8080)))
