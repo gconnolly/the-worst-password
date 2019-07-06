@@ -76,8 +76,9 @@ app.get('/authenticate', (req, res) => {
   })
 })
 
-app.get('/reset', (req, res) => {
+app.post('/reset', (req, res) => {
   client.del('cursor')
+  res.send('OK')
 })
 
 app.get('/oauth', (req, res) => {
