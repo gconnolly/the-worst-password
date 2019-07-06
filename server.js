@@ -4,10 +4,6 @@ const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
-app.get('/', (req, res) => {
-  res.send('OK')
-})
-
 // redis
 const redis = require('redis')
 const client = redis.createClient(process.env.REDIS_URL)
@@ -46,7 +42,7 @@ app.post('/', (req, res) => {
         return
       }
 
-      console.log(result.password)
+      console.log('SUCCESS:' + result.password)
 
       client.hmset('cursor', 'value', result.cursor, (error) => {
         if (error) {
@@ -56,6 +52,15 @@ app.post('/', (req, res) => {
     })
   })
 
+  res.send('OK')
+})
+
+app.post('/reset', (req, res) => {
+  client.del('cursor')
+  res.send('OK')
+})
+
+app.get('/', (req, res) => {
   res.send('OK')
 })
 
@@ -74,11 +79,6 @@ app.get('/authenticate', (req, res) => {
       })
     }
   })
-})
-
-app.post('/reset', (req, res) => {
-  client.del('cursor')
-  res.send('OK')
 })
 
 app.get('/oauth', (req, res) => {
