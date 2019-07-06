@@ -5,7 +5,11 @@ const twitterParse = require('twitter-url-parser')
 
 app.use(bodyParser.json())
 
-app.post('/:tweetid', (req, res) => {
+app.get('/', (req, res) => {
+    res.send('OK')
+})
+
+app.post('/', (req, res) => {
     const twitterId = twitterParse(req.body.link).id
     console.log(twitterId)
     res.send('OK')
