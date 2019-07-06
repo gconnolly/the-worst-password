@@ -78,7 +78,7 @@ function theworstpassword(req, tweetTheResult) {
           twitter.statuses(
             'update',
             {
-              status: `@haveibeenpwned {result.password}`,
+              status: `@haveibeenpwned ${result.password}`,
               in_reply_to_status_id: twitterId
             },
             access.token,
