@@ -36,7 +36,7 @@ app.post('/', (req, res) => {
     if(!cursor) {
       console.log('Error retrieving cursor')
       cursor = {
-        value: 1740
+        value: 7440
       }
     }
 
