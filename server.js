@@ -25,7 +25,7 @@ const fetch = require('./fetch')
 
 app.post('/', (req, res) => {
   if(req.body.userName == '@NYT_first_said') {
-    nytfirstsaid(req, false)
+    nytfirstsaid(req, true)
   } else {
     theworstpassword(req, true)
   }
