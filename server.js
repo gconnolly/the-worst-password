@@ -20,15 +20,76 @@ const twitter = new twitterAPI({
 // scan
 const scan = require('./scan')
 
+// fetch
+const fetch = require('./fetch')
+
 app.post('/', (req, res) => {
-  theworstpassword(req, true)
+  if(req.body.userName == '@NYT_first_said') {
+    nytfirstsaid(req, false)
+  } else {
+    theworstpassword(req, true)
+  }
+
   res.send('OK')
 })
 
 app.post('/test', (req, res) => {
-  theworstpassword(req, false)
+  if(req.body.userName == '@NYT_first_said') {
+    nytfirstsaid(req, false)
+  } else {
+    theworstpassword(req, false)
+  }
+
   res.send('OK')
 })
+
+async function nytfirstsaid(req, tweetTheResult) {
+  const twitterId = twitterParse(req.body.link).id
+  console.log('Process triggered by: ' + twitterId)
+
+  let result = await fetch(req.body.text);
+
+  if (error) {
+    console.log('Error fetching value: ' + error)
+    return
+  }
+
+  let tweetBody = `'${req.body.text}' is ${result?'':'not '}pwned. https://haveibeenpwned.com/Passwords`
+  // Log the result
+  console.log(`RESULT: ${tweetBody}`)
+
+  // Tweet the result
+  if (tweetTheResult) {
+    client.hgetall('access', (error, access) => {
+      if (error) {
+        console.log(error)
+        res.end()
+      } 
+      
+      if (!access) {
+        return
+      }
+
+      twitter.statuses(
+        'update',
+        {
+          status: `@NYT_first_said ${tweetBody}`,
+          in_reply_to_status_id: twitterId
+        },
+        access.token,
+        access.tokenSecret,
+        (error) => {
+          if (error) {
+            console.log(error)
+            return
+          }
+
+          console.log($`Tweeted: ${tweetBody}`)
+        }
+      )
+    })
+  }
+}
 
 function theworstpassword(req, tweetTheResult) {
   const twitterId = twitterParse(req.body.link).id
