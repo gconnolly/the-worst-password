@@ -47,9 +47,10 @@ async function nytfirstsaid(req, tweetTheResult) {
   const twitterId = twitterParse(req.body.link).id
   console.log('Process triggered by: ' + twitterId)
 
-  let result = await fetch(req.body.text);
-
-  if (error) {
+  let result = false
+  try {
+    result = await fetch(req.body.text)
+  } catch (error) {
     console.log('Error fetching value: ' + error)
     return
   }
