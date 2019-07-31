@@ -85,7 +85,7 @@ async function nytfirstsaid(req, tweetTheResult) {
             return
           }
 
-          console.log($`Tweeted: ${tweetBody}`)
+          console.log(`Tweeted: ${tweetBody}`)
         }
       )
     })
