@@ -34,7 +34,7 @@ app.post('/', (req, res) => {
 })
 
 app.post('/test', (req, res) => {
-  if(req.body.userName == '@NYT_first_said') {
+  if(req.body.userName == 'NYT_first_said') {
     nytfirstsaid(req, false)
   } else {
     theworstpassword(req, false)
