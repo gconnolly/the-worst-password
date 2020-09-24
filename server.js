@@ -47,7 +47,7 @@ async function nytfirstsaid(req, tweetTheResult) {
     return
   }
 
-  let tweetBody = `${result?'🚫':'✅'} "${req.body.text}" is ${result?'':'not '}a pwned password. Is your password pwned? https://haveibeenpwned.com/Passwords`
+  let tweetBody = `${result?'🚫':'✅'} "${req.body.text}" is ${result?'':'not '}a pwned password. Is your password pwned? https://haveibeenpwned.com/Passwords ${req.body.link}`
   // Log the result
   console.log(`RESULT: ${tweetBody}`)
 
@@ -66,8 +66,7 @@ async function nytfirstsaid(req, tweetTheResult) {
       twitter.statuses(
         'update',
         {
-          status: `@NYT_first_said ${tweetBody}`,
-          in_reply_to_status_id: twitterId
+          status: `@NYT_first_said ${tweetBody}`
         },
         access.token,
         access.tokenSecret,
