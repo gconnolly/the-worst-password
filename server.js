@@ -66,7 +66,7 @@ async function nytfirstsaid(req, tweetTheResult) {
       twitter.statuses(
         'update',
         {
-          status: `@NYT_first_said ${tweetBody}`
+          status: `${tweetBody}`
         },
         access.token,
         access.tokenSecret,
