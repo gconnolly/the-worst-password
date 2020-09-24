@@ -47,7 +47,7 @@ async function nytfirstsaid(req, tweetTheResult) {
     return
   }
 
-  let tweetBody = `"${result?'🚫':'✅'} ${req.body.text}" is ${result?'':'not '}a pwned password. Is your password pwned? https://haveibeenpwned.com/Passwords`
+  let tweetBody = `${result?'🚫':'✅'} "${req.body.text}" is ${result?'':'not '}a pwned password. Is your password pwned? https://haveibeenpwned.com/Passwords`
   // Log the result
   console.log(`RESULT: ${tweetBody}`)
 
